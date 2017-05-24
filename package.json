@@ -35,7 +35,6 @@
     "systemjs": "0.19.40",
     "zone.js": "0.6.26",
  
-    "angular-cli": "1.0.0",
     "@angular/compiler-cli": "2.1.2",
     "@types/core-js": "0.9.34",
     "@types/d3": "^4.9.0",

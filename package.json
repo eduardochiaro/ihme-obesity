@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "IHME Obesity data",
   "scripts": {
-    "start": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
+    "heroku-prebuild": "npm install -g http-server",
+    "heroku-postbuild": "ng build --prod",
+    "start": "http-server dist/",
+    "dev": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
     "lite": "lite-server",
     "tsc": "tsc",
     "tsc:w": "tsc -w"
@@ -30,14 +33,17 @@
     "reflect-metadata": "0.1.10",
     "rxjs": "5.0.0-beta.12",
     "systemjs": "0.19.40",
-    "zone.js": "0.6.26"
-  },
-  "devDependencies": {
+    "zone.js": "0.6.26",
+ 
+    "angular-cli": "1.0.0",
+    "@angular/compiler-cli": "2.1.2",
     "@types/core-js": "0.9.34",
     "@types/d3": "^4.9.0",
     "@types/node": "6.0.46",
-    "concurrently": "3.1.0",
-    "lite-server": "2.2.2",
     "typescript": "2.0.6"
+  },
+  "devDependencies": {
+    "concurrently": "3.1.0",
+    "lite-server": "2.2.2"
   }
 }

@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-xs-12 text-xs-center">
+        <h1>Mean adult obesity rates (20+ yrs - age-standardized) by country/region from 1990 to 2013</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 text-xs-right">
+        <form [formGroup]="filterForm">
+            <fieldset class="form-inline">
+                <div class="form-group float-xs-left" id="severity-form-group">
+                    <label for="countries-dropdown">Country</label>
+                    <select name="" id="countries-dropdown" class="form-control" formControlName="countries" #countrySelect (change)="changeCountry(countrySelect.value)">
+                    <option *ngFor="let country of countriesArr" [value]="country[0]">{{ country[2] }}</option>
+                    </select>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div #graph class="graph"><div>
+    </div>
+</div>

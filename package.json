@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "IHME Obesity data",
   "scripts": {
-    "postinstall": "tsc",
     "start": "node server.js",
     "dev": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
     "lite": "lite-server",

@@ -16,7 +16,7 @@
     "url": "https://github.com/eduardochiaro/ihme-obesity.git"
   },
   "dependencies": {
-    "@angular/cli": "^1.0.5",
+    "angular-cli": "1.0.0-beta.28.3",
     "@angular/common": "2.1.2",
     "@angular/compiler": "2.1.2",
     "@angular/compiler-cli": "2.1.2",
@@ -43,5 +43,8 @@
   "devDependencies": {
     "concurrently": "3.1.0",
     "lite-server": "2.2.2"
+  },
+  "engines": {
+    "npm": "4.6.1"
   }
 }

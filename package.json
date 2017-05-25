@@ -38,11 +38,12 @@
     "rxjs": "5.0.0-rc.4",
     "systemjs": "0.19.40",
     "typescript": "2.0.6",
-    "zone.js": "^0.7.2"
-  },
-  "devDependencies": {
+    "zone.js": "^0.7.2",
+
     "concurrently": "3.1.0",
     "lite-server": "2.2.2"
+  },
+  "devDependencies": {
   },
   "engines": {
     "node": "6.10.1",

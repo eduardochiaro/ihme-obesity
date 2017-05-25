@@ -1,3 +1,20 @@
 .container{
     padding-top: 30px;
 }
+.container h1 {
+    font-size: 1.6rem;
+    padding-bottom: 30px;
+}
+
+
+.tooltip {
+  position: absolute;
+  text-align: left;
+  width: 150px;
+  padding: 10px;
+  font: 12px sans-serif;
+  background-color: #F4f4f4;
+  border: 1px solid #333;
+  border-radius: 8px;
+  pointer-events: none;
+}

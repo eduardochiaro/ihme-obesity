@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, Input, ElementRef, ViewChild} from "@angular/core";
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Http, Response } from "@angular/http";
-import {DataSet} from "../model/dataSet";
+import { DataSet } from "../model/dataSet";
 
 //service
 import { CSVService } from "../service/csv.service";
@@ -61,6 +61,7 @@ export class MainComponent implements  AfterViewInit, OnInit {
     this.addLegend();
   }
 
+  // initial graph setup
   private setupGraph(): void {
     this.margin = { top: 20, right: 20, bottom: 40, left: 40 };
     this.width = this.htmlElement.clientWidth - this.margin.left - this.margin.right;
@@ -70,6 +71,7 @@ export class MainComponent implements  AfterViewInit, OnInit {
   }
 
 
+  // SVG creator
   private buildSVG(): void {
     this.host.html("");
     this.svg = this.host.append("svg")
@@ -80,6 +82,7 @@ export class MainComponent implements  AfterViewInit, OnInit {
   }
 
 
+  // draw X axis from
   private drawXAxis(): void {
     this.xAxis = D3.axisBottom(this.xScale)
       .tickFormat(D3.format(""))
@@ -90,7 +93,7 @@ export class MainComponent implements  AfterViewInit, OnInit {
       .call(this.xAxis);
   }
 
-
+  // draw Y axis from
   private drawYAxis(): void {
     this.yAxis = D3.axisLeft(this.yScale)
       .tickFormat(D3.format(".0%"))
@@ -107,7 +110,7 @@ export class MainComponent implements  AfterViewInit, OnInit {
       .text("Mean Obesity Prevalence");
   }
 
-
+  //populate chart
   private populate(): void {
     this.dataSet.forEach((area: any) => {
       this.xScale.domain(D3.extent(area.dataset, (d: any) => d.x));
@@ -125,10 +128,49 @@ export class MainComponent implements  AfterViewInit, OnInit {
           .y((d: any) => this.yScale(d.y))
         );
     });
+    this.addScatterplot();
   }
 
+  // Add the scatterplot
+  private addScatterplot(): void {
+    var div = D3.select("body").append("div")	
+      .attr("class", "tooltip")				
+      .style("opacity", 0);
+
+    this.dataSet.forEach((area: any) => {
+        this.svg.selectAll("dot")	
+          .data(area.dataset)			
+          .enter().append("circle")								
+          .attr("r", 5)		
+          .attr("cx", (d: any) => this.xScale(d.x))		 
+          .attr("cy", (d: any) => this.yScale(d.y))		
+          .attr("stroke", area.settings.fill)
+          .attr("fill", area.settings.fill)
+          .on("mouseover", function(d) {		
+              div.transition()		
+                  .duration(200)		
+                  .style("opacity", .9);		
+              div	.html("<b>Year:</b> " + d.x
+                        + "<br/><b>Sex:</b> "  + d.sex
+                        + "<br/><b>Measure:</b> "  + d.measure
+                        + "<br/><b>Mean:</b> "  + d.y
+                        + "<br/><b>Upper:</b> "  + d.upper
+                        + "<br/><b>Lower:</b> "  + d.lower
+                        + "<br/><div style='clear:both;'></div>" 
+                  )	
+                  .style("left", (D3.event.pageX) + "px")		
+                  .style("top", (D3.event.pageY - 28) + "px");	
+              })					
+          .on("mouseout", function(d) {		
+            div.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
+    });
+  }
+
+  // add legend from dataSet   
   private addLegend(): void{
-    // add legend   
     var legend = this.svg.append("g")
       .attr("class", "legend")
           //.attr("x", w - 65)
@@ -186,11 +228,20 @@ export class MainComponent implements  AfterViewInit, OnInit {
 
         keysArray.forEach((key: any) => {
             var current = filteredData[key];
+
+            var datainsert = {
+                  x: current[3], 
+                  y: Number(current[13]),
+                  measure: current[12],
+                  lower: Number(current[14]),
+                  upper: Number(current[15]),
+                  sex: current[9]
+                };
             if (current[9] == "male") {
-                maleData.dataset.push({x: current[3], y: Number(current[13])})
+                maleData.dataset.push(datainsert)
 
             } else if (current[9] == "female") {
-                femaleData.dataset.push({x: current[3], y: Number(current[13])})
+                femaleData.dataset.push(datainsert)
 
             }
         });

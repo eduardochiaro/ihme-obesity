@@ -37,6 +37,7 @@ var MainComponent = (function () {
         this.drawYAxis();
         this.addLegend();
     };
+    // initial graph setup
     MainComponent.prototype.setupGraph = function () {
         this.margin = { top: 20, right: 20, bottom: 40, left: 40 };
         this.width = this.htmlElement.clientWidth - this.margin.left - this.margin.right;
@@ -44,6 +45,7 @@ var MainComponent = (function () {
         this.xScale = D3.scaleTime().range([0, this.width]);
         this.yScale = D3.scaleLinear().range([this.height, 0]);
     };
+    // SVG creator
     MainComponent.prototype.buildSVG = function () {
         this.host.html("");
         this.svg = this.host.append("svg")
@@ -52,6 +54,7 @@ var MainComponent = (function () {
             .append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
     };
+    // draw X axis from
     MainComponent.prototype.drawXAxis = function () {
         this.xAxis = D3.axisBottom(this.xScale)
             .tickFormat(D3.format(""))
@@ -61,6 +64,7 @@ var MainComponent = (function () {
             .attr("transform", "translate(0," + this.height + ")")
             .call(this.xAxis);
     };
+    // draw Y axis from
     MainComponent.prototype.drawYAxis = function () {
         this.yAxis = D3.axisLeft(this.yScale)
             .tickFormat(D3.format(".0%"))
@@ -76,6 +80,7 @@ var MainComponent = (function () {
             .attr("text-anchor", "end")
             .text("Mean Obesity Prevalence");
     };
+    //populate chart
     MainComponent.prototype.populate = function () {
         var _this = this;
         this.dataSet.forEach(function (area) {
@@ -92,9 +97,46 @@ var MainComponent = (function () {
                 .x(function (d) { return _this.xScale(d.x); })
                 .y(function (d) { return _this.yScale(d.y); }));
         });
+        this.addScatterplot();
     };
+    // Add the scatterplot
+    MainComponent.prototype.addScatterplot = function () {
+        var _this = this;
+        var div = D3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+        this.dataSet.forEach(function (area) {
+            _this.svg.selectAll("dot")
+                .data(area.dataset)
+                .enter().append("circle")
+                .attr("r", 5)
+                .attr("cx", function (d) { return _this.xScale(d.x); })
+                .attr("cy", function (d) { return _this.yScale(d.y); })
+                .attr("stroke", area.settings.fill)
+                .attr("fill", area.settings.fill)
+                .on("mouseover", function (d) {
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                div.html("<b>Year:</b> " + d.x
+                    + "<br/><b>Sex:</b> " + d.sex
+                    + "<br/><b>Measure:</b> " + d.measure
+                    + "<br/><b>Mean:</b> " + d.y
+                    + "<br/><b>Upper:</b> " + d.upper
+                    + "<br/><b>Lower:</b> " + d.lower
+                    + "<br/><div style='clear:both;'></div>")
+                    .style("left", (D3.event.pageX) + "px")
+                    .style("top", (D3.event.pageY - 28) + "px");
+            })
+                .on("mouseout", function (d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+        });
+    };
+    // add legend from dataSet   
     MainComponent.prototype.addLegend = function () {
-        // add legend   
         var legend = this.svg.append("g")
             .attr("class", "legend")
             .attr("height", 100)
@@ -140,11 +182,19 @@ var MainComponent = (function () {
         var keysArray = Object.keys(filteredData);
         keysArray.forEach(function (key) {
             var current = filteredData[key];
+            var datainsert = {
+                x: current[3],
+                y: Number(current[13]),
+                measure: current[12],
+                lower: Number(current[14]),
+                upper: Number(current[15]),
+                sex: current[9]
+            };
             if (current[9] == "male") {
-                maleData.dataset.push({ x: current[3], y: Number(current[13]) });
+                maleData.dataset.push(datainsert);
             }
             else if (current[9] == "female") {
-                femaleData.dataset.push({ x: current[3], y: Number(current[13]) });
+                femaleData.dataset.push(datainsert);
             }
         });
         this.dataSet = new Array();

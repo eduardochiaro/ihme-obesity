@@ -14,11 +14,8 @@
             '@angular/router' : 'npm:@angular/router/bundles/router.umd.js',
             '@angular/forms' : 'npm:@angular/forms/bundles/forms.umd.js',
             'rxjs' : 'npm:rxjs',
-            'angular-in-memory-web-api' : 'npm:angular-in-memory-web-api',
-            'd3' : 'npm:d3',
-            'moment' : 'npm:moment'
+            'd3' : 'npm:d3'
         },
-
         packages: {
             app: {
                 main: './main.js',
@@ -27,16 +24,8 @@
             rxjs: {
                 defaultExtension: 'js'
             },
-            'angular-in-memory-web-api': {
-                main: './index.js',
-                defaultExtension: 'js'
-            },
             'd3': {
                 main:'build/d3.js', 
-                defaultExtension:'js'
-            },
-            'moment': {
-                main:'moment.js', 
                 defaultExtension:'js'
             }
         }
